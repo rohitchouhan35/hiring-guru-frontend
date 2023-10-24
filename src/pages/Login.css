@@ -1,51 +1,59 @@
+/* Updated Login Page Styles */
+.login-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
 .login-container {
-    background-color: #282c34;
-    font-family: Arial, sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
+  width: 20%;
+  padding: 20px;
+  padding-top: 40px;
+  margin-bottom: 10%;
+  border-radius: 5px;
+  box-shadow: 0px 8px 12px 0px #181622; 
+  background-color: #181622;
+  text-align: center;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.login-input {
+  width: 90%;
+  padding: 10px;
+  border: 1px solid #682ad5;
+  border-radius: 5px;
+  font-size: 20px;
+  color: #000000;
+  outline: none;
+}
+
+.login-input::placeholder {
+  font-size: 14px;
+}
+
+.login-btn {
+  width: 50%;
+  background-color: #682ad5;
+  color: white;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 20px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s; /* Smooth hover transition */
+}
+
+.login-btn:hover {
+  background-color: #5616c3;
+}
+
+/* Add media queries for responsiveness */
+@media (max-width: 768px) {
+  .login-container {
+    width: 80%;
   }
-  
-  .login-container h2 {
-    color: #fff;
-    text-align: center;
-  }
-  
-  .login-container form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .login-input {
-    width: 250px;
-    padding: 10px;
-    margin: 10px 0;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-  }
-  
-  .login-button {
-    background-color: #61dafb;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    padding: 10px 20px;
-    cursor: pointer;
-  }
-  
-  .login-button:hover {
-    background-color: #4287f5;
-  }
-  
-  .signup-link {
-    color: #61dafb;
-    text-decoration: none;
-  }
-  
-  .signup-link:hover {
-    text-decoration: underline;
-  }
-  
+}

@@ -1,37 +1,69 @@
 import React, { useState } from 'react';
 import './Login.css';
+import { useNavigate } from 'react-router-dom';
+import { useStateContext } from '../contexts/ContextProvider';
 
 const Login = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [credentials, setCredentials] = useState({ username: '', password: '' });
+  const navigate = useNavigate();
+  const { setIsLoggedIn } = useStateContext();
 
-  const handleLogin = (e) => {
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setCredentials((prevCredentials) => ({
+      ...prevCredentials,
+      [name]: value,
+    }));
+  };
+
+  const handleLogin = async (e) => {
     e.preventDefault();
-    // You can implement your login logic here
-    // For example, send a request to your authentication server
+    // Implement your login logic here and get the JWT token
+    // const token = await yourLoginFunction(credentials.username, credentials.password);
+    const token = "valido";
+
+    if (token) {
+      // Set the token in local storage
+      localStorage.setItem('token', token);
+      // Set the user as authenticated
+      setIsLoggedIn(true);
+      navigate('/protected/dashboard');
+    }
   };
 
   return (
-    <div className="login-container">
-      <h2>Login</h2>
-      <form onSubmit={handleLogin}>
-        <input
-          type="text"
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <button type="submit" className="login-button">Login</button>
-      </form>
-      <p>Don't have an account? <a className="signup-link" href="#">Sign Up</a></p>
+    <div className='login-page'>
+      <div className='login-container'>
+        <form onSubmit={handleLogin}>
+          <div className='form-group'>
+            <input
+              className='login-input'
+              type='text'
+              id='username'
+              name='username'
+              value={credentials.username}
+              onChange={handleChange}
+              placeholder='Enter your username'
+              required
+            />
+          </div>
+          <div className='form-group'>
+            <input
+            className='login-input'
+              type='text'
+              id='password'
+              name='password'
+              value={credentials.password}
+              onChange={handleChange}
+              placeholder='Enter your password'
+              required
+            />
+          </div>
+          <button className='login-btn' type='submit'>Login</button>
+        </form>
+      </div>
     </div>
   );
-}
+};
 
 export default Login;
