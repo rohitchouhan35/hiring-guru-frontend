@@ -5,6 +5,7 @@ import ProtectedRoutes from './ProtectedRoutes';
 import Home from './pages/Home';
 import Navbar from './components/Navbar';
 import Login from './pages/Login';
+import Meet from './pages/Meet';
 import { ContextProvider } from './contexts/ContextProvider';
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
         <Router>
           <Routes>
             <Route path="/login" element={<Login />} />
+            <Route path="/meet" element={<Meet />} />
             <Route path="/protected/*" element={<ProtectedRoutes />} /> {/* Protect routes starting with /protected */}
             <Route path="/" element={<Home />} />
           </Routes>
