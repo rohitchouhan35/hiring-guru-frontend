@@ -18,6 +18,24 @@ export async function joinMeeting(rohit, setAnswer, lastAnswerSDP) {
       // Handle received message (e.data) here
       console.log("New message from client! ", e.data);
     };
+    rohit.dataChannel.onopen = async (e) => {
+      console.log("Data channel opened!");
+      console.log("Message sender is ready...");
+  
+      async function sendMessage() {
+        const messageToSend = prompt("Enter a message to send or type 'quit'");
+        if (messageToSend !== "quit" && rohit.dataChannel.readyState === "open") {
+          rohit.dataChannel.send(messageToSend);
+          await sendMessage();
+        } else {
+          console.log('Data channel is closed or "quit" command entered.');
+        }
+      }
+  
+      // Start the asynchronous loop
+      await sendMessage();
+    };
+  
   };
 
   // Set remote description
@@ -28,7 +46,11 @@ export async function joinMeeting(rohit, setAnswer, lastAnswerSDP) {
   // Create and set local description (answer)
   await rohit.createAnswer()
     .then((o) => rohit.setLocalDescription(o))
-    .then(() => console.log("Set local description (answer) successfully!"))
+    .then(() => console.log("Set local description (answer) successfully!", JSON.stringify(rohit.localDescription)))
+    .then(() => sessionStorage.data.answer = JSON.stringify(rohit.localDescription))
+    .then(() => console.log("Saving answer with object: ", sessionStorage))
+    .then(() => Signal.saveAnswer(sessionStorage.data))
+    .then(() => console.log("Answer saved successfully."))
     .catch((error) => console.error("Error creating or setting local description:", error));
 
   // Process and add ice candidates
@@ -44,7 +66,6 @@ export async function joinMeeting(rohit, setAnswer, lastAnswerSDP) {
     if (event.target.connectionState === "connected") {
       console.log("Connected! You can now exchange messages with the other peer.");
       // Start your message exchange logic here
-      prompt("pausing")
     }
   };
 

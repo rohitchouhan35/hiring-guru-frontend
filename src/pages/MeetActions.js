@@ -2,6 +2,7 @@ import Signal from "../apis/SignallingApi";
 
 export async function startMeeting(sunflower, offer, setOffer, lastSDP, sendFinalSDPOffer) {
   var dataChannel = sunflower.createDataChannel("channel");
+  let currMeetID = null;
 
   dataChannel.onmessage = (e) => console.log("Just got a message: " + e.data);
 
@@ -32,16 +33,18 @@ export async function startMeeting(sunflower, offer, setOffer, lastSDP, sendFina
 
       console.log("Final SDP:", newOffer);
     } else {
-      let currMeetID = null;
       if (lastSDP) {
         currMeetID = await sendFinalSDPOffer(lastSDP);
         console.log("Current Meet ID:", currMeetID);
       }
 
-      const remoteAnswer = prompt("Enter remote answer: ");
-      console.log("Remote answer is: ", remoteAnswer);
+      // const sid = prompt("Enter remote answer: ");
+      alert("Press OK to connect");
 
-      await sunflower.setRemoteDescription(JSON.parse(remoteAnswer));
+      const sessionStorage = await Signal.getAnswer(currMeetID);
+      const remoteAnswer = JSON.parse(sessionStorage.data.answer);
+
+      await sunflower.setRemoteDescription(remoteAnswer);
     }
   };
 
