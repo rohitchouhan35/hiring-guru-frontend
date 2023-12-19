@@ -1,8 +1,8 @@
-// Meet.js
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../styles/Meet.css";
 import { startMeeting, sendFinalSDPOffer } from "./MeetActions";
 import { joinMeeting } from "./JoinActions";
+import StompProvider from "../components/StompProvider";
 
 const Meet = () => {
   const [offer, setOffer] = useState(null);
@@ -12,7 +12,13 @@ const Meet = () => {
   let lastAnswerSDP = null;
 
   async function handleStartMeeting() {
-    await startMeeting(new RTCPeerConnection(), offer, setOffer, lastSDP, sendFinalSDPOffer);
+    await startMeeting(
+      new RTCPeerConnection(),
+      offer,
+      setOffer,
+      lastSDP,
+      sendFinalSDPOffer
+    );
   }
 
   async function handleJoinMeeting() {
@@ -22,6 +28,7 @@ const Meet = () => {
 
   return (
     <div className="meet-container">
+    <StompProvider />
       <div className="left-container">
         <div className="meeting-btn">
           <button className="blank-button" onClick={handleStartMeeting}>
@@ -32,7 +39,6 @@ const Meet = () => {
           </button>
         </div>
       </div>
-      {/* <div className="right-container"></div> */}
     </div>
   );
 };

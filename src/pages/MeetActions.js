@@ -1,6 +1,13 @@
 import Signal from "../apis/SignallingApi";
+import CopyButtonText from "../components/CopyButtonText";
 
-export async function startMeeting(sunflower, offer, setOffer, lastSDP, sendFinalSDPOffer) {
+export async function startMeeting(
+  sunflower,
+  offer,
+  setOffer,
+  lastSDP,
+  sendFinalSDPOffer
+) {
   var dataChannel = sunflower.createDataChannel("channel");
   let currMeetID = null;
 
@@ -36,6 +43,11 @@ export async function startMeeting(sunflower, offer, setOffer, lastSDP, sendFina
       if (lastSDP) {
         currMeetID = await sendFinalSDPOffer(lastSDP);
         console.log("Current Meet ID:", currMeetID);
+        // apply logic to pop up a tect with copy button with this id
+        const sharableLink = currMeetID;
+        <div>
+          {currMeetID && <CopyButtonText sharableLink={sharableLink} />}
+        </div>;
       }
 
       // const sid = prompt("Enter remote answer: ");
@@ -55,7 +67,7 @@ export async function startMeeting(sunflower, offer, setOffer, lastSDP, sendFina
 }
 
 export async function sendFinalSDPOffer(finalSDP) {
-//   if (offer) finalSDP = offer;
+  //   if (offer) finalSDP = offer;
 
   console.log("Sending final SDP: ", finalSDP);
   const signalingMessage = await Signal.saveOffer(JSON.parse(finalSDP));
