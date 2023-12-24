@@ -1,6 +1,8 @@
 import React, {useEffect, useState} from "react";
 import { Client } from "@stomp/stompjs";
 import Lobby from "./Lobby";
+import ConnectingPageComponent from "./ConnectingPageComponent";
+import Meet from "../pages/Meet";
 
 const StompProvider = (props) => {
 
@@ -66,7 +68,7 @@ const StompProvider = (props) => {
     }
 
     if (!stompClient) {
-        return <h2>Connecting...</h2>;
+        return <ConnectingPageComponent />
     }
     const childrenWithProps = React.Children.map(props.children, child => {
         if (React.isValidElement(child)) {
@@ -78,15 +80,18 @@ const StompProvider = (props) => {
         return child;
     });
 
-    // return <h2>Connected</h2>;
+    return <Meet
+                onSubscribe={(subscription) => handleSubscription(subscription)}
+                onPublishMessage={(destination, message) => handlePublishMessage(destination, message)}
+             />;
 
     // return <div>{childrenWithProps}</div>;
-    return (
-        <Lobby
-            onSubscribe={(subscription) => handleSubscription(subscription)}
-            onPublishMessage={(destination, message) => handlePublishMessage(destination, message)}
-        />
-    );
+    // return (
+    //     <Lobby
+    //         onSubscribe={(subscription) => handleSubscription(subscription)}
+    //         onPublishMessage={(destination, message) => handlePublishMessage(destination, message)}
+    //     />
+    // );
 
 }
 

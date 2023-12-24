@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from "react";
 import Signal from "../apis/SignallingApi";
 import CopyButtonText from "../components/CopyButtonText";
 
@@ -6,8 +7,33 @@ export async function startMeeting(
   offer,
   setOffer,
   lastSDP,
-  sendFinalSDPOffer
+  onSubscribe,
+  onPublishMessage,
 ) {
+
+// --------------------    WEBSOCKET   ----------------------- //
+
+  const handleSubscribe = () => {
+    // Subscribe to a Stomp topic
+    onSubscribe({
+      topic: "/all/messages",
+      onMessage: (message) => {
+        // Handle incoming messages
+        console.log("Printing websocket incoming message...")
+        console.log(message);
+      },
+    });
+  };
+
+  const handleSendMessage = (message) => {
+    // Publish a message to the Stomp destination
+    onPublishMessage("/app/application", message);
+    console.log("Published message...");
+  };
+
+  // --------------------    WEBSOCKET   ----------------------- //
+
+
   var dataChannel = sunflower.createDataChannel("channel");
   let currMeetID = null;
 
@@ -41,14 +67,17 @@ export async function startMeeting(
       console.log("Final SDP:", newOffer);
     } else {
       if (lastSDP) {
+
+        handleSendMessage(lastSDP);
+
         currMeetID = await sendFinalSDPOffer(lastSDP);
         console.log("Current Meet ID:", currMeetID);
-        // apply logic to pop up a tect with copy button with this id
-        const sharableLink = currMeetID;
-        <div>
-          {currMeetID && <CopyButtonText sharableLink={sharableLink} />}
-        </div>;
       }
+
+      const sharableLink = currMeetID;
+      <div>
+        {currMeetID && <CopyButtonText sharableLink={sharableLink} />}
+      </div>;
 
       // const sid = prompt("Enter remote answer: ");
       alert("Press OK to connect");

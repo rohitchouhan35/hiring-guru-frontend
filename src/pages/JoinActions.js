@@ -1,6 +1,30 @@
 import Signal from "../apis/SignallingApi";
 
-export async function joinMeeting(rohit, setAnswer, lastAnswerSDP) {
+export async function joinMeeting(rohit, setAnswer, lastAnswerSDP, onSubscribe, onPublishMessage) {
+
+  // --------------------    WEBSOCKET   ----------------------- //
+
+  const handleSubscribe = () => {
+    // Subscribe to a Stomp topic
+    onSubscribe({
+      topic: "/all/messages",
+      onMessage: (message) => {
+        // Handle incoming messages
+        console.log("Printing websocket incoming message...")
+        console.log(message);
+      },
+    });
+  };
+
+  const handleSendMessage = (message) => {
+    // Publish a message to the Stomp destination
+    onPublishMessage("/app/application", message);
+    console.log("Published message...");
+  };
+
+  // --------------------    WEBSOCKET   ----------------------- //
+
+  handleSubscribe();
   const inputSessionID = prompt("Enter meet ID: ");
   const sessionStorage = await Signal.getOffer(inputSessionID);
 

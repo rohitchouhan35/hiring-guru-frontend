@@ -7,16 +7,17 @@ import Navbar from './components/Navbar';
 import Login from './pages/Login';
 import Meet from './pages/Meet';
 import { ContextProvider } from './contexts/ContextProvider';
+import StompProvider from './components/StompProvider';
 
 function App() {
   return (
     <div className="App">
-      <Navbar />
+      {/* <Navbar /> */}
       <ContextProvider> {/* Wrap your app with the context provider */}
         <Router>
           <Routes>
             <Route path="/login" element={<Login />} />
-            <Route path="/meet" element={<Meet />} />
+            <Route path="/meet" element={<StompProvider />} />
             <Route path="/protected/*" element={<ProtectedRoutes />} /> {/* Protect routes starting with /protected */}
             <Route path="/" element={<Home />} />
           </Routes>
